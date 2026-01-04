@@ -1,0 +1,218 @@
+Net Work Scanning:
+                  Network Scanning in simply words is a process to gather information on the Network
+Tools for Networking Scanning:
+                              NMAP & ZENMAP (NMAP is CLI (Command line Interface) and ZENMAP is GUI (Graphhical User Interface) that is same to NMAP)
+                              ANGRY IP SCANNER (This tool se also GUI and also CLI available mostly used in Windows)
+                              NESSUS (Used for automation testing most)
+                              HPING3 (Very fast packet transfer very good for long range scanning)
+How it works:
+             Finding weak ports and compromising devices
+TCP:
+    Transmission Control Protocol (TCP) is a set of rules that govern how data is exchanged between devices on a network. Most applications use TCP for their communication.
+Flags in TCP:
+             URG (Urgent)
+             FIN (Finish)
+             RST (Reset)
+             PSH (Push)
+             ACK (Acknowledgement)
+             SYN (Synchronize) Also a Initialization flag
+Handshake:
+          It is the process of making connection.
+          It defines the process of connection making.
+Ports:
+      1-65535 total ports in a network.
+TCP Scan:
+         TCP Scan also known as Connect Scan, In this we use working of TCP to gather Information
+Commands to perfrom TCP Scans:
+                              NMAP:
+                                   nmap -sT IP (nmap is tool name s mean what type of scan and T mean TCP and then victim IP, arrangement does'nt matter)
+                              NETCAT:
+                                     nc -zv IP 1-1000 (NETCAT mean Network Communication, This tool also used for scan)
+                              HPING3:
+                                     hping3 --tcp-connect -p 80 -c 1 IP (We can also add 1 port or all ports)
+                              MASSCAN:
+                                      masscan -p1-65355 --rate=1000 -banner IP (It scans all ports cuz we defined all tools )
+NMAP Scan:
+          Open terminal 1st
+          Gain root permissions by sudu su
+          Run command nmap IP -p1-65535 -sT -v (v mean verbus, it is used to restrict nmap that tell me in details how you are performing tasks)
+SYN Scan:
+         A network scan technique that sends a SYN packet to a target system to determine if a port is open,closed, or filtered.It is also known as a half-open scan.
+         Sometimes, we does'nt get proper result in normal scans and either blocked by firewall, So we use SYC scan to bypass.
+SYN Working:
+            First we send a SYN flag to the victim to check is the port is opened or not, if the port is opened then victim's device resend us SNN and ACK flag and then we also return them a SYN flag to confirm the connection is established.
+            In the whole process, We are first establishing a connection that is important.
+            It is also genuine if we make multiple connections firewall can stop us, to bypass it we use SYN Scan.
+            SYN scan check the port is opened or not bypassing the firewall.
+            Mean, We are just sending SYN flag and waiting for reply
+            Not building a connection my our ACK flag.
+            It is also known as half open scan, In this we check port is opened or not  and not establish a connection.
+SYN Scan Commands:
+                  NMAP:
+                       nmap -sS IP (NMAO tool name  s mean same type of scan and capital S mean SYN Scan and victim's IP)
+                  HPING3:
+                         hping3 -S -p 80 IP (Arrangemnet is not fixed in all tools commands are fix)
+SYN Scan:
+         Open terminal and give them root permission
+         Then type command nmap IP -p 1-65355 -v p describes all port and v mean verbus that decribes how it processing (it is not SYN Scan we not telled us)
+         To perfrom SYN Scan just add -sS
+Goals of Network Scanning:
+                          Host Descovery
+                          Open Ports (1-65535) It is not important that all ports are open all time
+                          Active Servies
+                          Software Versions
+                          OS Version
+Practical Network Scanning:
+                           Open terminal and give them root permission by sudu su command
+                           type netdiscover it findd all the network connected in your range it may take time
+                           then nmap IP of viction and -p and ports you want to scan if you want to write shortcut to scan all ports write -p- and -v thats mean verbal to know exactly whats happening.
+                           You can scan SYC Scan by -sS it will shows all open ports their status and service name
+                           to check softwares and their veriosn ass -sV in aboive command that will also display softwares and their versions
+                           You can also add -O its capital O to check the version and details of operating system
+                           So, run final command nmap IP -p- -v -sS -sV -O it will find all details
+Advanced Scanning Commands:
+                           NMAP have built in scripts that we will use to collect advanced data
+                           The extension of script is .NSE
+                           /usr/share/nmap/scripts you can check all scripts here
+                           There are two methods to run these scripts one is automation and other is manual
+                           To use automation open a new tap and don't close scripts tab 
+                           Give a root permission to new tap by sudu su
+                           To run a automation scan add -sC here C is for automation scripts nmap IP -p- -sC -oX here small o is used to save outpul and X mean in XML format
+                           Also add a file name the command will be nmap IP -p- -sC -oX name.xml
+                           Also add -sV to check software and their versions nmap IP -p- -sC -sV -oX name.xml
+                           Now you have xml file you can check by ls
+                           xsltproc tool is used to convert files to another format. So, to understand xml convert it into html
+                           Run command xsltproc name.xml -o name.html this command will create a copy of file in html
+                           Open the html file in your browser you can see your scan result then clearly the data will be fully arranged
+                           Manual Scan:
+                                       --script command is used to run script manually
+                                       Open scripts in one terminal
+                                       And then open terminal and give a root permission by command sudo su
+                                       You can see we have scripts for all ports
+                                       If we want to run all scripts of FTP that are available in scripts
+                                       Keep in mind port 21 is used for FTP
+                                       To use all scripts of FTP find a common word only in FTP scripts that is ftp
+                                       To perform attack command is nmap IP -p 21 --script=ftp*
+                                       in above we specified 21 because 21 is port for FTP
+                                       then --script command
+                                       then equal to ftp and * here* mean any data can be after ftp
+                                       So, In short it will run all ftp scripts on port 21 and display output it will take time
+                                       You can also save file if you want by -oX in xml and if you want to print softwares and versions simply add -sV
+                                       Same method is for all ports
+                                       Instead of checking each script of any port you can use port ls | grep "smtp"
+                                       you can type any word instead of smtp then it will display only those scripts where smtp is found
+                                       nmap 192.168.152.131 -p 25 --script=smtp* use this command for smtp and same format is used for every port
+                                       SMTP full form is Simple Mail Transfer Protocol
+Checking host status and buffer size:
+                                     It is used to check how much size of packet victim'c machine can handle
+                                     Open terminal and give root permission
+                                     Use command ping and domain name to check IP is active or not
+                                     ping google.com or any domain and it will display google IP if it is active
+                                     Then you can copy google IP and again ping it like ping 142.250.192.110 it is the IP of google, it will send packets to this IP
+                                     It will display by dafault size of packet transfer size IP and ICMP sequence
+                                     ICMP mean Internet Control Management/Message Protocol
+                                     It will also display TTL and Time
+                                     TTL mean Time To Live
+                                     Increase size of packet by -s and 80 or any multiple
+                                     -s increase size by 8 and we specify size to 80 so it will be 88 size of packet by ping IP -s 80
+                                     We have to check MTU that means Maximum Tranmission Unit/Limit.
+                                     But if larger packets are not accepted it will automatically divide into smaller parts
+                                     So, to check maximun transmission size, We have to turn off this division.
+                                     For this add -M and write do to turn this off nmap IP -M do -s 80
+                                     Use different sizes to check its capability it will give error in larger sizes So, it is easy to find maximum size.
+                                     If we keep sending packets of maximum size the machine can't do great operations for other.
+                                     We can figure OS by TTL by searching TTL OS Table and match same table
+NMAP Scan without Ping:
+                       Sometimes or mostly firewall block us to ping the website, To bypass tha firewall use this method.
+                       Firewall is stopping us to ping so just off the ping by -Pn
+                       nmap IP -v -p 80 -Pn use this command  -v for verbus mean details and -p and define any port and -Pn mean no ping
+                       But it is the scan for one machine if you want to check all machines of this IP just erase last number of IP and add 0/24
+                       It is the range of IP so it will scan multiples system at one time
+NMAP No Port Scan:
+                  If we want to scan a large amout of systems but firewall is blocking us to send multiple packeges,So we will reduce the packet size,etc.
+                  Our first thing to do is to find victim
+                  For this we will perform no port scan 
+                  So, In this way we can bypass our firewall
+                  Our need is to find victim from range then only scan ports of victim
+                  For this we will just add -sn
+                  nmap IP  -v -sn here -v for vorbus mean details and -sn mean no port scan
+NMAP XMAS Scan:
+               This scan tries to collect all the data from victim machine at one time
+               To perfrom scans we add -s and multiple things it become big command
+               So, instead of this we can just add -A that have all the above permissions
+               This scan is also called agressive scan and this is not prefer because there are more chances of block and no data 
+               nmap IP -A -v command is used and if you want to manually add all  ports just add -p-
+               This is recommended where firewall is not active
+NMAP Aggressive San:
+                    Sometimes, we don't know why firewall is blocking us to scan
+                    For this just add -sX which mean XMAS scan abd -v for verbus nmap IP -sX -v
+                    If you see filtered or closed mean firewall is not bypassed
+                    Normally, we don't know why firewall is stoping us.
+                    The best way is to perform all the scans and see where we got result
+Randomize Host:
+               In this we give a valid to packets in this way firewall does'nt thing we are sending multiple packets to machines
+               nmap 66.198.240.0/24 -v -p- --randomize-hosts this command will be used for this type of scan
+               here --randomize-hosts is our main function
+               This randomly scan each machine, In this way every machine get valid time and time reduces to get blocked by firewall
+NMAP -D Decoy Scan:
+                   It is used to stay anonymous during scan and does'nt get blocked by firewall.
+                   In this we send packets from multiple IP's, In this way we are undetectable 
+                   For this we use -D
+                   nmap 66.198.240.8 -D RND:10 use this command here -D is decoy RND mean random and enter specified amount of random IP's
+                   If you don't add RND -D will automatically use random IP's but you have to enter number of IP
+                   You can check from wireshark that is it working or not
+                   WireShark is a tool to check network transactions it is also called packet sniffing
+                   Also add -v to check vorbus details
+-S IP Spoofing:
+               Mostly, we get blocked by firewall
+               We can also use IP spoofing in nmap to get anonymous
+               nmap -S IP1 IP2 here what IP we will speficfy in IP place nmap send packet from whose IP1
+               But there's one draw back that NMAP also return packet to same IP1
+               So, mostly we use this method when we have access to IP
+               IP2 is the victim IP that we have to specify
+               This is mostly used in Man In The Middle Attacl (MITM)
+               You have to also add -e for interface that is eth0 or wlan0 and -Pn also
+               You will not get the result but you can check from wireshark that you are sending packets
+               You can also add manually IP's instead of RMD
+MAC Spoofing:
+             Sometimes when we, caught by the firewall
+             So, if we change our mac address our identity will be changed and we cannot be caught
+             For this we use --spoof-mac and then vendor name or manually mac address
+             We knoe every mac is made by vendor mean manufacturer
+             If we want automatic mac address we can add vendor name like apple nokia
+             nmap --spoof-mac apple IP -Pn
+             In this way we cannot be get caught
+             Other methos is to change mac of our machine but it is not recommended
+             Don't forgot to use -v
+--source-port:
+              This method is used to bypass firewall by other and other methods
+              nmap --source-port 53 IP -v
+Fast Scanning:
+              For fast scanning -F is used
+              The main reason firewall stop us is because we send multiple packages
+              In this we reduce our packets and get fast result
+              nmap IP -F -v
+              It scan 100 ports not 1000
+              These ports are random
+              For more data you can add -sV
+Null Scan:
+          This is also a firewall bypass technique other then Windows without any flag
+          Most firewalls take eye on our flags
+          So, if we don't use any flag we will not be detected
+          If ports are open we got no reply and if ports are closed we will get RST flag
+          nmap -sN Ip -v -p-
+          Here -sN the N is null scan
+Modifying packets size --date-;ength, -f, --mtu:
+                                                This is advanced firewall bypass technique
+                                                In this we modify packet size to bypass the firewall
+                                                -f id firsy command mean fragnantation
+                                                used to shrink the size of packets
+                                                In this way firewall can't be able to read to packets
+                                                In some way we use to increase size of packet to make packet genuine
+                                                nmap IP -f -p- -v
+                                                This is small f capital F used for fast scan
+                                                To define the size of fragnantation --mtu command is used instead of -f 
+                                                nmap IP -p- -v --mtu=16 -sS -vv here new thing is we used -vv double v means double vorbus single v is also okay
+                                                nmap 66.198.240.8 --date-length 24 -v 
+                                                This command is used to describe the raw data more closely
+                                                24 is the size of data we want to add in dafault data size
